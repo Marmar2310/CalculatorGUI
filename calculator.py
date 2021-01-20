@@ -4,7 +4,7 @@ expression = ""
 
 def button_press(num):
     global expression
-    expression = expression + str(num)
+    expression += str(num)
     equation.set(expression)
 
 def equal_button():
@@ -17,6 +17,44 @@ def clear_button():
     global expression
     expression = ""
     equation.set("")
+#
+# def power_button():
+#     global expression
+#
+
+def square_button():
+    global expression
+    temp = expression
+    expression += ' *' + get_prev_expression(expression) + ' '
+    total = str(eval(expression))
+    equation.set(total)
+    print(temp + "TEMP")
+    expression = total
+
+def remove_last_expression(expr):
+    i = len(expr)-1
+    str_expr = list(expr)
+    last = ' '
+    while not expr[i] == '+' and not expr[i] == '-' \
+        and not expr[i] == '*' and not expr[i] == '/':
+        if str_expr == []:
+            break
+        print(str(str_expr) + "CURR_EXP")
+        last += str_expr.pop()
+        i -= 1
+    return str(expr)
+
+
+def get_prev_expression(expr):
+    i = len(expr)-1
+    prev = ""
+    while not expr[i] == '+' and not expr[i] == '-' \
+        and not expr[i] == '*' and not expr[i] == '/':
+        prev = expr[i] + prev
+        if i == 0:
+            break
+        i -= 1
+    return prev
 
 if __name__ == '__main__':
     window = Tk()
@@ -94,4 +132,11 @@ if __name__ == '__main__':
                      command=lambda: button_press('.'), height=1, width=7)
     decimal.grid(row=5, column=0)
 
+    square = Button(window, text =' x² ', fg='white', bg='grey',
+                     command=square_button, height=1, width=7)
+    square.grid(row=6, column=1)
+
+    # power = Button(window, text =' xⁿ ', fg='white', bg='grey',
+    #                  command=power_button, height=1, width=7)
+    # power.grid(row=6, column=2)
     window.mainloop()
